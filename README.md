@@ -1,110 +1,134 @@
 # Trend Agent
 
-Trend Agent helps you plan a week of social media content for your business. You describe what you do — for example, a lash technician in Manchester — and the app looks up what people are actually searching for on Google right now. It then suggests trending topics, a post idea for each day Monday through Sunday, and rough times of day when posting tends to work well.
+**Your niche. This week’s Google searches. A full content plan — in seconds.**
 
-There is no paid subscription, no ChatGPT, and no fake “example” trends. The ideas are built from live Google Trends data whenever Google allows the lookup. If Google is busy or rate-limits the request, the app still returns a sensible plan based on your business words so the page never breaks.
+Trend Agent is for creators, shop owners, and side hustlers who are tired of staring at a blank caption box. Tell it what you do — *“lash tech in Manchester”*, *“mobile barber in Atlanta”*, *“vegan bakery Portland”* — and it pulls **real, live** topics from Google Trends, then maps them onto **Monday through Sunday** with hooks, post ideas, and when to publish.
 
----
-
-## What you get
-
-- **Trending topics** — real search phrases related to your niche  
-- **A 7-day content plan** — one hook and one concrete post idea per weekday  
-- **Best posting windows** — simple time ranges (morning, lunch, evening) to aim for  
-
-Open the **index.html** page in your browser, type your business, and click generate. Keep the small server running in the background (see below) so the page can fetch results.
+No monthly fee. No ChatGPT bill. No fake “trending” placeholders. When Google cooperates, every hook is tied to something people are actually searching for right now. When Google throttles requests, you still get a usable plan built from your own words — the app never leaves you on a dead screen.
 
 ---
 
-## What you need first
+## What lands in your lap
 
-1. **A computer** running Windows, Mac, or Linux  
-2. **Python 3.10** — download the installer from [python.org](https://www.python.org/downloads/). On Windows, during install, tick **“Add python.exe to PATH”** if you see that option.  
-3. **An internet connection** — the app talks to Google Trends when you generate a plan  
+| You get | Why it matters |
+|---|---|
+| **Trending topics** | Real search phrases in your space — not guesses |
+| **7-day content plan** | One hook + one concrete post idea per day |
+| **Best posting windows** | Morning, lunch, and evening slots to aim for |
 
-You do not need a Google account or API keys for this project.
+Open **index.html** in your browser, describe your business, hit generate. Keep the small Python server running in the background (takes two minutes to set up once) and you’re live.
 
 ---
 
-## How to run it (step by step)
+## Under the hood (the stack, in human terms)
 
-### 1. Get the project on your computer
+This project is deliberately small and honest: a browser UI, a lightweight API, and a direct line to Google Trends. Nothing exotic — just tools that do one job well.
 
-If you cloned or downloaded this folder from GitHub, open it in File Explorer (Windows) or Finder (Mac). You should see files such as **app.py**, **index.html**, and **requirements.txt** in the same folder.
+| Technology | What it does here |
+|---|---|
+| **Python 3.10** | Runs the whole backend — keyword cleanup, trend fetching, plan building |
+| **Flask** | Powers the web server and the `/generate` endpoint your browser talks to |
+| **flask-cors** | Lets the frontend call the API from your machine without browser security headaches |
+| **pytrends** | Talks to Google Trends and brings back related queries and topics |
+| **pandas** | Sorts and shapes the raw trend data into clean lists |
+| **HTML, CSS & JavaScript** | The dark, single-page UI in **index.html** — no React build step, no npm install |
 
-### 2. Install the extra Python packages (one time)
+**Philosophy:** scrape real data, template smart copy, ship fast. No LLM in the loop means no API keys, no hallucinated trends, and no surprise invoices.
 
-Open a terminal in that folder:
+---
 
-- **Windows:** right-click the folder → “Open in Terminal”, or open Command Prompt / PowerShell, then use `cd` to go to the project folder.  
-- **Mac:** right-click the folder → New Terminal at Folder, or open Terminal and `cd` into the folder.
+## What you need before you start
 
-Run this command (copy it exactly):
+1. **A laptop or desktop** — Windows, Mac, or Linux  
+2. **Python 3.10** — grab it from [python.org](https://www.python.org/downloads/). On Windows, check **“Add python.exe to PATH”** during install if you see it  
+3. **Wi‑Fi** — live lookups need the internet; everything else runs locally on your machine  
+
+You do **not** need a Google Cloud account, OpenAI key, or credit card.
+
+---
+
+## Get running in four steps
+
+### 1. Open the project folder
+
+Clone or download this repo from GitHub, then open the folder. You should see **app.py**, **index.html**, and **requirements.txt** sitting together.
+
+### 2. Install dependencies (one time)
+
+Open a terminal inside that folder:
+
+- **Windows:** right-click the folder → **Open in Terminal**, or open PowerShell and `cd` into the folder  
+- **Mac:** right-click → **New Terminal at Folder**, or `cd` into the folder from Terminal  
+
+Run:
 
 `py -3.10 -m pip install -r requirements.txt`
 
-On Mac or Linux, if `py -3.10` does not work, try:
+On Mac/Linux, if that fails, try:
 
 `python3 -m pip install -r requirements.txt`
 
-Wait until it finishes without errors. You only need to do this once, or again if you delete Python or move to a new machine.
+That pulls in Flask, pytrends, pandas, and the rest. Wait until it finishes — you only do this once per machine.
 
 ### 3. Start the server
 
-In the same terminal, from the project folder, run:
+From the same folder:
 
 `py -3.10 app.py`
 
-On Mac or Linux, use `python3 app.py` if needed.
+(Mac/Linux: `python3 app.py` if needed.)
 
-Leave this window open. You should see a message that the app is listening on port 5000. That means the backend is ready.
+**Leave this window open.** When you see that the app is listening on port **5000**, the backend is ready. Quick sanity check: visit **http://localhost:5000/** in a browser — a short “status ok” message means Flask is humming.
 
-To check: open a browser and go to **http://localhost:5000/** — you should see a short JSON message saying the service is OK. You can close that tab; the main app is the HTML page.
+### 4. Open the app and generate
 
-### 4. Open the app in your browser
-
-Double-click **index.html** in the project folder, or drag it into Chrome, Edge, Firefox, or Safari.
-
-Type a short description of your business (city and niche help), submit the form, and wait a few seconds. The first request can take a little longer while Google Trends is queried.
+Double-click **index.html** (or drag it into Chrome, Edge, Firefox, or Safari). Type your business with a bit of location and niche detail, submit, and give it a few seconds — the first live scrape is always the slowest.
 
 ---
 
-## Tips for everyday use
+## Tips that actually help
 
-- **Describe your business clearly** — e.g. “coffee shop in Austin” or “mobile dog groomer Leeds” works better than a single vague word.  
-- **Keep the terminal running** while you use the website. Closing the terminal stops the server.  
-- **If results say they are not “live”** — Google sometimes limits how often trends can be fetched. Wait about a minute and try again, or retry later. The plan will still be usable.  
-- **Slow first load** — live trend lookups take a few seconds on purpose so Google does not block the app.  
+- **Be specific.** “Coffee shop Shoreditch” beats “coffee” every time.  
+- **Keep the terminal open** while you use the site — closing it kills Flask.  
+- **Seeing “mock” instead of “live”?** Google rate-limited you. Wait 30–60 seconds and try again; your plan is still usable in the meantime.  
+- **First request feels slow?** Normal. The app paces requests so Google doesn’t ban the IP.  
 
 ---
 
-## If something goes wrong
+## When something breaks
 
 | What you see | What to try |
 |---|---|
-| “Module not found” or Flask missing | Run the install step again with the same Python you use to start **app.py** (`py -3.10` on Windows). |
-| Page says it cannot connect | Make sure **app.py** is still running in the terminal and you did not close that window. |
-| Port 5000 already in use | Another program is using that port. Close other dev tools, or change the port number at the bottom of **app.py** and use the new address in the browser. |
-| Plan looks generic, not “live” | Google rate-limited the lookup. Wait 30–60 seconds and generate again. |
-| `python` does not work on Windows | Use `py -3.10` for both install and run so Windows picks the right Python version. |
+| “Module not found” / Flask missing | Re-run the install step with the **same** Python you use to start **app.py** (`py -3.10` on Windows). |
+| Page can’t connect | Confirm **app.py** is still running in the terminal. |
+| Port 5000 already in use | Close other dev tools, or change the port at the bottom of **app.py**. |
+| Results feel generic | Google throttled the scrape — wait a minute and regenerate. |
+| `python` won’t run on Windows | Stick with `py -3.10` for **both** install and run so Windows uses one interpreter. |
 
 ---
 
-## How it works (in plain terms)
+## The pipeline (60-second version)
 
-1. You describe your business in plain English.  
-2. The app pulls out useful words and searches Google Trends for related topics and queries.  
-3. It turns those real search phrases into seven days of hooks and post ideas, plus suggested posting times.  
+1. **You** describe the business in plain English.  
+2. **Python** strips noise words and builds a handful of search terms.  
+3. **pytrends** hits Google Trends for related queries and topics.  
+4. **pandas** ranks and deduplicates what comes back.  
+5. **Flask** serves a JSON plan — trends, seven days of hooks/ideas, posting times.  
+6. **The browser** renders it in a clean weekly layout.
 
-No AI model writes the copy — templates and the trend text itself shape what you see. That keeps the tool simple, free, and tied to what people are actually searching for.
+Templates turn trend text into captions — not an AI model. That’s the trade-off: predictable, free, and grounded in real search behavior.
 
 ---
 
-## Files in this project
+## Project files
 
-| File | Purpose |
+| File | Role |
 |---|---|
-| **app.py** | The small server that fetches trends and builds your plan |
-| **index.html** | The page you open in the browser |
-| **requirements.txt** | List of Python libraries to install once |
-| **README.md** | This guide |
+| **app.py** | Flask server + trend logic |
+| **index.html** | Frontend you open in the browser |
+| **requirements.txt** | Python packages to install |
+| **README.md** | You are here |
+
+---
+
+Built for people who post for a living — powered by Python, Flask, and whatever the internet is searching for today.
